@@ -28,6 +28,8 @@ interface GameContextType {
   gameTimeElapsed: number; // 0 to 120 seconds
   formattedClock: string; // e.g., "12:00 AM", "1:00 AM", ..., "6:00 AM"
   isGameRunning: boolean;
+  showTutorial: boolean;
+  dismissTutorial: () => void;
   resetGame: () => void;
   triggerGameOver: () => void;
 }
@@ -46,6 +48,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const [battery, setBattery] = useState<number>(100);
   const [isFlashlightOn, setIsFlashlightOn] = useState<boolean>(false);
   const [isGameRunning, setIsGameRunning] = useState<boolean>(false);
+  const [showTutorial, setShowTutorial] = useState<boolean>(true);
 
   // Audio References
   const ambientAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -94,6 +97,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setBattery(100);
     setIsFlashlightOn(false);
     setActiveCam("cam1");
+    setShowTutorial(true);
+    setIsGameRunning(false); // Game starts immediately when tutorial is dismissed
+  }, []);
+
+  const dismissTutorial = useCallback(() => {
+    setShowTutorial(false);
     setIsGameRunning(true);
   }, []);
 
@@ -108,7 +117,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   }, [isGamePage, resetGame, stopAllAudio]);
 
-  // Ambient Audio Management for /game page
+  // Ambient Audio Management for /game page (starts when gameplay begins)
   useEffect(() => {
     if (!ambientAudioRef.current) {
       const audio = new Audio("/assets/audio/Ambient.mp3");
@@ -229,6 +238,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   // Flashlight hold start handler
   const startFlashlight = useCallback(() => {
+    if (!isGameRunning) return;
+
     if (battery <= 0) {
       try {
         if (!flashJamAudioRef.current) {
@@ -251,7 +262,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       onSound.volume = 0.8;
       onSound.play().catch(() => {});
     } catch {}
-  }, [battery]);
+  }, [battery, isGameRunning]);
 
   // Flashlight hold end handler
   const stopFlashlight = useCallback(() => {
@@ -271,6 +282,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
         gameTimeElapsed,
         formattedClock,
         isGameRunning,
+        showTutorial,
+        dismissTutorial,
         resetGame,
         triggerGameOver,
       }}

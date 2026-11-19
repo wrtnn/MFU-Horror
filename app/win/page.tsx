@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { GAME_IMAGES } from "@/config/assets";
 
 export default function WinPage() {
   const alarmAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -55,10 +56,11 @@ export default function WinPage() {
       {/* Background Win Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/assets/images/ui/win.jpg"
+          src={GAME_IMAGES.ui.win}
           alt="Night Survived"
           fill
           priority
+          unoptimized
           sizes="100vw"
           className="object-cover object-center brightness-50 contrast-110"
         />

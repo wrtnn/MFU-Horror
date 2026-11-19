@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  images: {
+    // Disable server-side image caching TTL in dev/prod to prevent stale cached resized images
+    minimumCacheTTL: 0,
+  },
 };
 
 export default nextConfig;

@@ -7,6 +7,8 @@ import { BatteryIndicator } from "@/components/game/BatteryIndicator";
 import { FlashlightButton } from "@/components/cctv/FlashlightButton";
 import { useGhostSystem } from "@/hooks/useGhostSystem";
 import { GhostRenderer } from "@/components/cctv/GhostRenderer";
+import { TutorialModal } from "@/components/ui/TutorialModal";
+import { GAME_IMAGES } from "@/config/assets";
 
 const CAMERA_INFO: Record<CameraId, { label: string; name: string }> = {
   cam1: { label: "CAM 1", name: "CAM 1" },
@@ -27,6 +29,8 @@ export default function GamePage() {
     gameTimeElapsed,
     formattedClock,
     isGameRunning,
+    showTutorial,
+    dismissTutorial,
     triggerGameOver,
   } = useGame();
 
@@ -71,8 +75,8 @@ export default function GamePage() {
   });
 
   const currentCam = CAMERA_INFO[activeCam];
-  const baseImage = `/assets/images/cctv/${activeCam}.jpg`;
-  const lightImage = `/assets/images/cctv/${activeCam}Light.jpg`;
+  const baseImage = GAME_IMAGES.cctv[activeCam];
+  const lightImage = GAME_IMAGES.cctv[`${activeCam}Light` as keyof typeof GAME_IMAGES.cctv];
 
   // Delayed camera switch function with Click sound
   const handleCameraChange = useCallback(
@@ -99,6 +103,9 @@ export default function GamePage() {
 
   // Hotkeys: Spacebar (Hold flashlight) and Keys 1, 2, 3, 4 (Switch cameras)
   useEffect(() => {
+    // If tutorial is showing, keys are handled by TutorialModal to dismiss
+    if (showTutorial) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       // Camera Hotkeys 1, 2, 3, 4
       if (e.key === "1") {
@@ -143,12 +150,15 @@ export default function GamePage() {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [handleCameraChange, startFlashlight, stopFlashlight]);
+  }, [showTutorial, handleCameraChange, startFlashlight, stopFlashlight]);
 
   const cams: CameraId[] = ["cam1", "cam2", "cam3", "cam4"];
 
   return (
     <main className="relative flex min-h-screen w-full flex-col justify-between overflow-hidden bg-black text-white selection:bg-red-900 selection:text-white">
+      {/* Tutorial Popup Modal (Shown once at the beginning of each new game) */}
+      {showTutorial && <TutorialModal onDismiss={dismissTutorial} />}
+
       {/* CCTV Camera Background Feeds */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -156,6 +166,7 @@ export default function GamePage() {
           alt={`${currentCam.name} Feed`}
           fill
           priority
+          unoptimized
           sizes="100vw"
           className="object-cover object-center brightness-90 contrast-110"
         />
@@ -168,6 +179,7 @@ export default function GamePage() {
               alt={`${currentCam.name} Illuminated Feed`}
               fill
               priority
+              unoptimized
               sizes="100vw"
               className="object-cover object-center brightness-105 contrast-110"
             />

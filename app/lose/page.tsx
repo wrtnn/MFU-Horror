@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { GAME_IMAGES } from "@/config/assets";
 
 export default function LosePage() {
   return (
@@ -7,10 +8,11 @@ export default function LosePage() {
       {/* Background Lose Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/assets/images/ui/lose.jpg"
+          src={GAME_IMAGES.ui.lose}
           alt="Signal Terminated"
           fill
           priority
+          unoptimized
           sizes="100vw"
           className="object-cover object-center brightness-90 contrast-125"
         />

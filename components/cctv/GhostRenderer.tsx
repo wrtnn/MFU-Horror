@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { GhostState } from "@/systems/ghostSystem";
+import { GAME_IMAGES } from "@/config/assets";
 
 interface GhostRendererProps {
   ghost: GhostState;
@@ -9,9 +10,7 @@ interface GhostRendererProps {
 export function GhostRenderer({ ghost }: GhostRendererProps) {
   if (!ghost.active) return null;
 
-  const ghostImageSrc = `/assets/images/anomalies/ghost${
-    ghost.camId.charAt(0).toUpperCase() + ghost.camId.slice(1)
-  }.png`;
+  const ghostImageSrc = GAME_IMAGES.anomalies[ghost.camId];
 
   // During exposure, transition color from normal towards deep red
   const redFactor = Math.min(1, Math.max(0, ghost.exposureProgress));
@@ -41,6 +40,7 @@ export function GhostRenderer({ ghost }: GhostRendererProps) {
           alt={`Ghost on ${ghost.camId}`}
           fill
           priority
+          unoptimized
           sizes="40vw"
           className="object-contain object-center"
         />

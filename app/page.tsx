@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { GAME_IMAGES } from "@/config/assets";
 
 export default function Home() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -87,10 +88,11 @@ export default function Home() {
       {/* Background Image Container */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/assets/images/ui/menu.jpg"
+          src={GAME_IMAGES.ui.menu}
           alt="MFU CCTV Horror Menu Background"
           fill
           priority
+          unoptimized
           sizes="100vw"
           className="object-cover object-center contrast-125"
         />
