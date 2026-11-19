@@ -1,69 +1,67 @@
+import Link from "next/link";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-center overflow-hidden bg-black text-white selection:bg-red-900 selection:text-white">
+      {/* Background Image Container */}
+      <div className="absolute inset-0 z-0">
         <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
+          src="/assets/images/ui/menu-bg.jpg"
+          alt="MFU CCTV Horror Background"
+          fill
           priority
+          sizes="100vw"
+          className="object-cover object-center opacity-40 brightness-75 contrast-125"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+        {/* Dark vignette & noise-like gradient overlay */}
+        <div className="absolute inset-0 bg-radial from-transparent via-black/60 to-black pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.5)_50%)] bg-[length:100%_4px] opacity-25 pointer-events-none" />
+      </div>
+
+      {/* Main Menu Center Content */}
+      <div className="relative z-10 flex flex-col items-center justify-center px-6 text-center">
+        {/* Game Title */}
+        <div className="mb-12 space-y-2">
+          <p className="font-mono text-xs tracking-[0.35em] text-red-500 uppercase drop-shadow-[0_0_8px_rgba(239,68,68,0.7)]">
+            MFU CCTV Survival Horror
+          </p>
+          <h1 className="font-mono text-4xl sm:text-6xl font-extrabold uppercase tracking-widest text-zinc-100 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+            Anomaly Detection
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+          <p className="font-mono text-xs text-zinc-400 tracking-wider">
+            SYSTEM STATUS: MONITORING ACTIVE
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* Action Buttons */}
+        <div className="flex w-64 flex-col gap-4">
+          <Link
+            href="/cam1"
+            className="group relative flex h-13 w-full items-center justify-center border border-zinc-700 bg-black/70 font-mono text-sm font-semibold tracking-widest uppercase text-zinc-100 backdrop-blur-sm transition-all duration-200 hover:border-red-600 hover:bg-red-950/40 hover:text-red-400 hover:shadow-[0_0_20px_rgba(220,38,38,0.4)] active:scale-98"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <span className="absolute left-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100 text-red-500">
+              ▶
+            </span>
+            Start
+          </Link>
+
+          <Link
+            href="/cam1"
+            className="group relative flex h-13 w-full items-center justify-center border border-zinc-700 bg-black/70 font-mono text-sm font-semibold tracking-widest uppercase text-zinc-100 backdrop-blur-sm transition-all duration-200 hover:border-zinc-400 hover:bg-zinc-900/60 hover:text-white hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] active:scale-98"
           >
-            Documentation
-          </a>
+            <span className="absolute left-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100 text-zinc-400">
+              ▶
+            </span>
+            Continue
+          </Link>
         </div>
-      </main>
-    </div>
+      </div>
+
+      {/* Footer Info */}
+      <div className="absolute bottom-6 z-10 font-mono text-[11px] tracking-widest text-zinc-600">
+        SURVIVE 5 NIGHTS • 4 CAMERAS
+      </div>
+    </main>
   );
 }
