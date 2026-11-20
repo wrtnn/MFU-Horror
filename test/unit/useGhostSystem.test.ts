@@ -1,6 +1,6 @@
 import { act, renderHook } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { useGhostSystem } from "./useGhostSystem";
+import { useGhostSystem } from "@/hooks/useGhostSystem";
 import type { CameraId } from "@/components/game/GameContext";
 import {
   EXPOSURE_REQUIRED_MS,
@@ -110,6 +110,7 @@ beforeEach(() => {
 });
 
 describe("useGhostSystem", () => {
+    // [TC-022] starts with every ghost inactive
   it("starts with every ghost inactive", () => {
     const { result } = renderGhostHook();
 
@@ -122,6 +123,7 @@ describe("useGhostSystem", () => {
     expect(result.current.activeGhost).toBe(result.current.ghosts.cam1);
   });
 
+    // [TC-023] does not check for a spawn before the five second interval
   it("does not check for a spawn before the five second interval", () => {
     const { result } = renderGhostHook();
 
@@ -131,6 +133,7 @@ describe("useGhostSystem", () => {
     expect(result.current.ghosts.cam1.active).toBe(false);
   });
 
+    // [TC-024] spawns a ghost when the probability check succeeds
   it("spawns a ghost when the probability check succeeds", () => {
     randomValue = 0;
     const { result } = renderGhostHook();
@@ -144,6 +147,7 @@ describe("useGhostSystem", () => {
     expect(result.current.ghosts.cam2.active).toBe(false);
   });
 
+    // [TC-025] does not spawn when the probability check fails
   it("does not spawn when the probability check fails", () => {
     randomValue = 0.99;
     const { result } = renderGhostHook();
@@ -156,6 +160,7 @@ describe("useGhostSystem", () => {
     }
   });
 
+    // [TC-026] uses the later, higher spawn chance as the night progresses
   it("uses the later, higher spawn chance as the night progresses", () => {
     randomValue = 0.4;
 
@@ -175,6 +180,7 @@ describe("useGhostSystem", () => {
     expect(late.result.current.ghosts.cam2.active).toBe(true);
   });
 
+    // [TC-027] fades a ghost in over its 20 second lifetime
   it("fades a ghost in over its 20 second lifetime", () => {
     const { result } = spawnGhostAtFiveSeconds();
 
@@ -184,6 +190,7 @@ describe("useGhostSystem", () => {
     expect(result.current.ghosts.cam1.opacity).toBeCloseTo(0.5);
   });
 
+    // [TC-028] ends the game when a ghost survives its full lifetime
   it("ends the game when a ghost survives its full lifetime", () => {
     const { result, onGameOver } = spawnGhostAtFiveSeconds();
 
@@ -195,6 +202,7 @@ describe("useGhostSystem", () => {
     expect(rafMap.size).toBe(0);
   });
 
+    // [TC-029] does not trigger game over more than once
   it("does not trigger game over more than once", () => {
     const { onGameOver } = spawnGhostAtFiveSeconds();
 
@@ -206,6 +214,7 @@ describe("useGhostSystem", () => {
     expect(onGameOver).toHaveBeenCalledTimes(1);
   });
 
+    // [TC-030] eliminates a ghost after one continuous second of flashlight exposure
   it("eliminates a ghost after one continuous second of flashlight exposure", () => {
     const { result, onGameOver } = spawnGhostAtFiveSeconds({
       isFlashlightOn: true,
@@ -226,6 +235,7 @@ describe("useGhostSystem", () => {
     expect(onGameOver).not.toHaveBeenCalled();
   });
 
+    // [TC-031] resets exposure progress when the flashlight is released
   it("resets exposure progress when the flashlight is released", () => {
     const { result, rerender } = spawnGhostAtFiveSeconds({
       isFlashlightOn: true,
@@ -252,6 +262,7 @@ describe("useGhostSystem", () => {
     expect(result.current.ghosts.cam1.active).toBe(true);
   });
 
+    // [TC-032] resets exposure progress when the active camera changes
   it("resets exposure progress when the active camera changes", () => {
     const { result, rerender } = spawnGhostAtFiveSeconds({
       isFlashlightOn: true,
@@ -275,6 +286,7 @@ describe("useGhostSystem", () => {
     expect(result.current.ghosts.cam1.active).toBe(true);
   });
 
+    // [TC-033] does not eliminate a ghost that is not on the active camera
   it("does not eliminate a ghost that is not on the active camera", () => {
     const { result } = spawnGhostAtFiveSeconds({
       activeCam: "cam2",
@@ -290,6 +302,7 @@ describe("useGhostSystem", () => {
     expect(result.current.ghosts.cam1.exposureProgress).toBe(0);
   });
 
+    // [TC-034] does not eliminate a ghost when the battery is empty
   it("does not eliminate a ghost when the battery is empty", () => {
     const { result } = spawnGhostAtFiveSeconds({
       isFlashlightOn: true,
@@ -303,6 +316,7 @@ describe("useGhostSystem", () => {
     expect(result.current.ghosts.cam1.exposureProgress).toBe(0);
   });
 
+    // [TC-035] resets all ghosts when the game stops
   it("resets all ghosts when the game stops", () => {
     const { result, rerender } = spawnGhostAtFiveSeconds();
 
@@ -322,6 +336,7 @@ describe("useGhostSystem", () => {
     }
   });
 
+    // [TC-036] returns the ghost of the currently active camera
   it("returns the ghost of the currently active camera", () => {
     const { result, rerender } = spawnGhostAtFiveSeconds();
 
@@ -340,6 +355,7 @@ describe("useGhostSystem", () => {
     expect(result.current.activeGhost.active).toBe(false);
   });
 
+    // [TC-037] plays the dog howl once at 2 AM and once at 4 AM
   it("plays the dog howl once at 2 AM and once at 4 AM", () => {
     const { rerender } = renderGhostHook({ gameTimeElapsed: 39 });
 
@@ -377,6 +393,7 @@ describe("useGhostSystem", () => {
     expect(howls()).toHaveLength(2);
   });
 
+    // [TC-038] loops the teeth grinding audio only for a visible ghost with 10 seconds left
   it("loops the teeth grinding audio only for a visible ghost with 10 seconds left", () => {
     const { rerender } = spawnGhostAtFiveSeconds();
 

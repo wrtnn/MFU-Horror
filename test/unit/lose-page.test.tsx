@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
-import LosePage from "./page";
+import LosePage from "@/app/lose/page";
 
 describe("Lose page", () => {
+    // [TC-113] renders the game over message
   it("renders the game over message", () => {
     render(<LosePage />);
 
@@ -17,6 +18,7 @@ describe("Lose page", () => {
     ).toBeInTheDocument();
   });
 
+    // [TC-114] offers retry and main menu actions
   it("offers retry and main menu actions", () => {
     render(<LosePage />);
 

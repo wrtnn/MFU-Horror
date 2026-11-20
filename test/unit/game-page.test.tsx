@@ -1,6 +1,6 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import GamePage from "./page";
+import GamePage from "@/app/game/page";
 import { GameProvider } from "@/components/game/GameContext";
 import { setPathname } from "@/test/mocks/next-navigation";
 
@@ -18,6 +18,7 @@ describe("Game page", () => {
     vi.useFakeTimers();
   });
 
+    // [TC-097] shows the tutorial before the night begins
   it("shows the tutorial before the night begins", () => {
     renderGamePage();
 
@@ -28,6 +29,7 @@ describe("Game page", () => {
     expect(screen.getAllByText("12:00 AM").length).toBeGreaterThan(0);
   });
 
+    // [TC-098] starts the shift when the tutorial is dismissed
   it("starts the shift when the tutorial is dismissed", () => {
     const { container } = renderGamePage();
 
@@ -42,6 +44,7 @@ describe("Game page", () => {
     expect(container.querySelector("header")).toHaveTextContent("12:00 AM");
   });
 
+    // [TC-099] shows all four camera buttons
   it("shows all four camera buttons", () => {
     renderGamePage();
 
@@ -54,6 +57,7 @@ describe("Game page", () => {
     }
   });
 
+    // [TC-100] switches cameras with the keyboard after a short signal delay
   it("switches cameras with the keyboard after a short signal delay", () => {
     const { container } = renderGamePage();
 
@@ -67,6 +71,7 @@ describe("Game page", () => {
     expect(container.querySelector("header")).toHaveTextContent("CAM 2");
   });
 
+    // [TC-101] switches cameras when a camera button is clicked
   it("switches cameras when a camera button is clicked", () => {
     const { container } = renderGamePage();
 
@@ -78,6 +83,7 @@ describe("Game page", () => {
     expect(container.querySelector("header")).toHaveTextContent("CAM 4");
   });
 
+    // [TC-102] switches cameras with every number hotkey
   it("switches cameras with every number hotkey", () => {
     const { container } = renderGamePage();
     const header = () => container.querySelector("header");
@@ -96,6 +102,7 @@ describe("Game page", () => {
     }
   });
 
+    // [TC-103] cancels a pending camera switch when another camera is requested
   it("cancels a pending camera switch when another camera is requested", () => {
     const { container } = renderGamePage();
 
@@ -109,6 +116,7 @@ describe("Game page", () => {
     expect(container.querySelector("header")).toHaveTextContent("CAM 3");
   });
 
+    // [TC-104] stops menu, alarm, and jumpscare audio left over from previous screens
   it("stops menu, alarm, and jumpscare audio left over from previous screens", () => {
     const lingering = ["Menu.mp3", "Alarm.mp3", "Jumpscare.mp3"].map((name) => {
       const audio = document.createElement("audio");
@@ -126,6 +134,7 @@ describe("Game page", () => {
     }
   });
 
+    // [TC-105] dismisses the tutorial instead of switching cameras on the first key press
   it("dismisses the tutorial instead of switching cameras on the first key press", () => {
     const { container } = renderGamePage();
 
@@ -137,6 +146,7 @@ describe("Game page", () => {
     ).not.toBeInTheDocument();
   });
 
+    // [TC-106] holds the flashlight while the space bar is pressed
   it("holds the flashlight while the space bar is pressed", () => {
     renderGamePage();
 
@@ -149,6 +159,7 @@ describe("Game page", () => {
     expect(screen.getByText("HOLD FLASHLIGHT")).toBeInTheDocument();
   });
 
+    // [TC-107] renders the battery indicator
   it("renders the battery indicator", () => {
     renderGamePage();
 

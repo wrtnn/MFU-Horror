@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen } from "@testing-library/react";
-import WinPage from "./page";
+import WinPage from "@/app/win/page";
 
 describe("Win page", () => {
+    // [TC-108] renders the victory message
   it("renders the victory message", () => {
     render(<WinPage />);
 
@@ -15,6 +16,7 @@ describe("Win page", () => {
     ).toBeInTheDocument();
   });
 
+    // [TC-109] offers a return to the main menu
   it("offers a return to the main menu", () => {
     render(<WinPage />);
 
@@ -23,12 +25,14 @@ describe("Win page", () => {
     ).toHaveAttribute("href", "/");
   });
 
+    // [TC-110] cleans up the alarm audio on unmount
   it("cleans up the alarm audio on unmount", () => {
     const { unmount } = render(<WinPage />);
 
     expect(() => unmount()).not.toThrow();
   });
 
+    // [TC-111] retries the alarm on user interaction when autoplay is blocked
   it("retries the alarm on user interaction when autoplay is blocked", async () => {
     const play = vi.mocked(window.HTMLMediaElement.prototype.play);
     play.mockRejectedValueOnce(new Error("autoplay blocked"));
@@ -41,6 +45,7 @@ describe("Win page", () => {
     expect(play).toHaveBeenCalledTimes(2);
   });
 
+    // [TC-112] stops the alarm before returning to the menu
   it("stops the alarm before returning to the menu", () => {
     const pause = vi.mocked(window.HTMLMediaElement.prototype.pause);
     render(<WinPage />);

@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
-import Home from "./page";
+import Home from "@/app/page";
 
 describe("Home page", () => {
+    // [TC-091] renders the title and primary actions
   it("renders the title and primary actions", () => {
     render(<Home />);
 
@@ -19,6 +20,7 @@ describe("Home page", () => {
     ).toBeInTheDocument();
   });
 
+    // [TC-092] marks audio as playing when the menu track autoplays
   it("marks audio as playing when the menu track autoplays", async () => {
     render(<Home />);
 
@@ -27,6 +29,7 @@ describe("Home page", () => {
     ).toHaveTextContent("AUDIO: PLAYING");
   });
 
+    // [TC-093] toggles the menu audio on and off
   it("toggles the menu audio on and off", async () => {
     render(<Home />);
 
@@ -42,6 +45,7 @@ describe("Home page", () => {
     await waitFor(() => expect(toggle).toHaveTextContent("AUDIO: PLAYING"));
   });
 
+    // [TC-094] stops the menu audio when starting the game
   it("stops the menu audio when starting the game", async () => {
     const { container } = render(<Home />);
     const audio = container.querySelector("audio") as HTMLAudioElement;
@@ -54,6 +58,7 @@ describe("Home page", () => {
     expect(audio.currentTime).toBe(0);
   });
 
+    // [TC-095] falls back to the first user interaction when autoplay is blocked
   it("falls back to the first user interaction when autoplay is blocked", async () => {
     vi.mocked(window.HTMLMediaElement.prototype.play).mockRejectedValueOnce(
       new Error("autoplay blocked")
@@ -70,6 +75,7 @@ describe("Home page", () => {
     await waitFor(() => expect(toggle).toHaveTextContent("AUDIO: PLAYING"));
   });
 
+    // [TC-096] silences lingering game audio when returning to the menu
   it("silences lingering game audio when returning to the menu", () => {
     const lingering = document.createElement("audio");
     lingering.src = "/assets/audio/Alarm.mp3";
