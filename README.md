@@ -22,6 +22,15 @@ A browser-based survival horror game inspired by Mae Fah Luang University at nig
 - JavaScript
 - CSS
 
+## Testing
+
+The full test suite and test case table are documented in [`test/README.md`](test/README.md).
+
+```bash
+npm test
+npm run test:coverage
+```
+
 ## Objective
 
 Stay alert, monitor the cameras, eliminate anomalies, and survive until 6 AM!
